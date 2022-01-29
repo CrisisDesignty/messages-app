@@ -18,13 +18,36 @@ const addMessage = (user:string, message:string) => {
     })
 }
 
-const getAllMessages = () => {
+const getAllMessages = (filterUser) => {
     return new Promise((resolve , reject) => {
-        resolve(store.list());
+        resolve(store.list(filterUser));
     })
 } 
 
+const updateMessage = async(id: string, message: string): Promise<string> => {
+    if (!id || !message) throw new Error('Invalid data');
+    try {
+        const updateMessage: string = await store.updateText(id, message);
+        return updateMessage;
+    } catch(error) {
+        console.log(error);
+        throw new Error('Server Error, updating messsage');
+    }
+}
+
+const deleteMessage = async(id: string): Promise<void> => {
+    try {
+        await store.remove(id)
+    } catch(err) {
+        console.error(err);
+        throw new Error('Erro at deleted process')
+    }
+    
+}
+
 module.exports = {
     addMessage,
-    getAllMessages
+    getAllMessages,
+    updateMessage,
+    deleteMessage
 };

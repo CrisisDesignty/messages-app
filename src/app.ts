@@ -1,7 +1,12 @@
 import express, { Application, NexFunction, Port, Router } from 'express';
 import bodyParser  from 'body-parser';
 
+import { dbConnect } from './db/db';
+
 const router = require('./network/routers')
+
+//Connecting to MongoDb
+dbConnect();
 
 const app: Application = express();
 app.use(bodyParser.json())
