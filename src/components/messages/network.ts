@@ -15,7 +15,7 @@ router.get('/', (req: Request, res) => {
             errors(req, res, 'Unexpected Error', 500, e)
         })
 });
-router.post('/', async(req: Request, res: Response) => {
+router.post('/', async(req: Request, res: Response): Promise<void> => {
     const { user, message } = req.body
     try {        
         const fullMessage = await controller.addMessage(user, message)

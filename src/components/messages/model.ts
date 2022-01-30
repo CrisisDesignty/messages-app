@@ -1,15 +1,19 @@
-import { Schema, model } from 'mongoose';
+import mongoose from 'mongoose';
 
+const Schema = mongoose.Schema;
 
 const mySchema = new Schema({
-    user: String,
+    user: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+    }], 
     message: {
         type: String,
         required: true,
     },
     date: Date,
-}, { collection: 'messages' });
+}, { collection: 'messages' },)
 
-const myModel = model('messages', mySchema);
+const myModel = mongoose.model('messages', mySchema);
 
 export default myModel;

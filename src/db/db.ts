@@ -7,7 +7,7 @@ const uri = apiKey;
 // MongoDb Connection
 db.Promise = global.Promise
 
-const dbConnect = async(): Promise<void> => {
+export const dbConnect = async(): Promise<void> => {
     try {
         await db.connect(uri) 
         console.log('[db] Succes connecting to moongose')
@@ -15,15 +15,3 @@ const dbConnect = async(): Promise<void> => {
         console.error('[db]', err);
     }
 } 
-
-
-interface Message {
-    user: String,
-    message: String,
-    date: Date,
-}
-
-export {
-    Message,
-    dbConnect
-}

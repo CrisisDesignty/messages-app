@@ -1,5 +1,9 @@
 import Model from './model'
-import { Message } from '../../db/db';
+import { Message } from '../../utils/interfaces';
+import { error } from 'console';
+import { errors } from '../../network/response';
+import { rejects } from 'assert';
+import { resolve } from 'path/posix';
 
 // Add a message
 const addMessage = (message: Message): void => {
@@ -9,15 +13,18 @@ const addMessage = (message: Message): void => {
 
 // Get all messages
 const getMessages = async (filterUser): Promise<Message[]> => {
-    let filter = {};
+    try {
+        let filter = {};
 
-    if(filterUser != null){
-        filter = {
-            user: new RegExp(filterUser, "i")
-        };
+        if(filterUser != null){
+            filter = { user: filterUser 
+                }
+            }
+            const messages: Message[] = await Model.find(filter).populate('user');
+            return messages;
+        } catch(err) {
+        throw new Error('Error trying to update')
     }
-    const messages: Message[] = await Model.find(filter);
-    return messages;
 }
 
 // Update message
