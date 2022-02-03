@@ -6,9 +6,10 @@ import { rejects } from 'assert';
 import { resolve } from 'path/posix';
 
 // Add a message
-const addMessage = (message: Message): void => {
-    const myMessage = new Model(message);
+const addMessage = async(message: Message): Promise<Message> => {
+    const myMessage = await new Model(message);
     myMessage.save();
+    return myMessage
 };
 
 // Get all messages

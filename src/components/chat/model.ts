@@ -5,13 +5,10 @@ const Schema = mongoose.Schema;
 const mySchema = new Schema({
     users: [{
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'chatUsers'
     }] 
-
 })
 
-const model = mongoose.model('chatInterface', mySchema);
+const model = mongoose.model('Chat', mySchema);
 
-export = {
-    model
-}
+export default model;

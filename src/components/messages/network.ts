@@ -1,9 +1,22 @@
 import express, { Request, Response, Router } from 'express';
+import multer from 'multer';
 import { success, errors } from '../../network/response';
 
+const path = require('path');
 const controller = require('./controller');
 const router: Router = express.Router();
 
+const storage = multer.diskStorage({
+    destination : "uploads/",
+    filename : function (req, file, cb) {
+        cb(null, file.fieldname + "-" + Date.now() + 
+        path.extname(file.originalname))
+    }
+})
+
+const upload = multer({
+    storage: storage,
+});
 
 router.get('/', (req: Request, res) => {
     const filterMessages = req.query.user || null;
@@ -15,10 +28,9 @@ router.get('/', (req: Request, res) => {
             errors(req, res, 'Unexpected Error', 500, e)
         })
 });
-router.post('/', async(req: Request, res: Response): Promise<void> => {
-    const { user, message } = req.body
+router.post('/', upload.single('file'), async(req: Request, res: Response): Promise<void> => {
     try {        
-        const fullMessage = await controller.addMessage(user, message)
+        const fullMessage = await controller.addMessage(req.body.chat, req.body.user, req.body.message, req.file)
         success(req, res, fullMessage, 201)
     } catch (error) {
         errors(req, res, "Invalid Data", 500, "Content error")

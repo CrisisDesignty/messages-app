@@ -1,16 +1,26 @@
+import { fileURLToPath } from "url";
 
 const store = require('./store');
 
-const addMessage = (user:string, message:string) => {
+const addMessage = (chat, user:string, message:string, file)  => {
     return new Promise((resolve, reject) => { 
-        if (!user || !message) {
+        if (!chat || !message || !message) {
             console.error('[message controller] No hay usuario o mensaje');
-            return reject('Ilegal Data');
+            reject('Ilegal Data')
+            return false
         }
+
+        let fileUrl = '';
+        if(file) {
+            fileUrl = 'http://localhost:3000/app/files' + file.filename;
+        }
+
         const fullMessage = {
+            chat: chat,
             user: user,
             message: message,
-            date: new Date()
+            date: new Date(),
+            file: fileUrl,
         };
         store.add(fullMessage);
         
@@ -23,7 +33,7 @@ const getAllMessages = (filterUser) => {
         resolve(store.list(filterUser));
     })
 } 
-
+ 
 const updateMessage = async(id: string, message: string): Promise<string> => {
     if (!id || !message) throw new Error('Invalid data');
     try {
